@@ -1,5 +1,6 @@
 import { IApiConfig } from '@realworld/shared/api/config';
-const packageJson = require('../../../../package.json')
+require('dotenv').config();
+const packageJson = require('../../../../package.json');
 
 export const environment: IApiConfig = {
   production: false,
@@ -8,6 +9,6 @@ export const environment: IApiConfig = {
   port: 3333,
   version: packageJson.version,
   debug: true,
-  jwtSecret: 'jwtSecret',
-  jwtExpiresIn: '1y'
+  jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
+  jwtExpiresIn: '1y',
 };

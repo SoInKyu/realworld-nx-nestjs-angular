@@ -40,3 +40,6 @@ Thumbs.db
 
 migrations/*.js
 log
+
+# Environment variables
+.env

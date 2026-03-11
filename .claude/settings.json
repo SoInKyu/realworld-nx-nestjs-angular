@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PROJECT_ROOT=\"$(git -C \"$(dirname \"$0\")\" rev-parse --show-toplevel 2>/dev/null || pwd)\"; CHANGED=$(git -C \"$PROJECT_ROOT\" diff --name-only HEAD 2>/dev/null | grep -E '\\.(ts|js|json|html|scss|css)$' | grep -v 'node_modules' | grep -v 'README.md' | grep -v '\\.claude/' | head -5); if [ -n \"$CHANGED\" ]; then echo \"[README REMINDER] Source files were modified in this session. Consider updating README.md if the changes affect: project structure, setup steps, API routes, test coverage, or architecture.\"; echo \"Changed files: $CHANGED\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}

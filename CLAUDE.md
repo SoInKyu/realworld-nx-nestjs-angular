@@ -123,6 +123,7 @@ jest.mock('@nestjs/typeorm', () => ({
 - 독립적인 작업은 반드시 병렬로 수행한다 (예: 서로 다른 라이브러리의 테스트 작성, 독립된 파일 읽기/검색, 관련 없는 서브태스크 동시 실행)
 - Agent 도구 사용 시 의존성이 없는 작업은 하나의 메시지에서 여러 Agent를 동시에 dispatch한다
 - Bash 도구도 독립적인 명령어는 병렬로 호출한다 (예: 여러 프로젝트의 테스트를 동시에 실행)
+- Pre-commit hook (Husky v9)이 staged 파일에 Prettier 자동 포맷팅 적용
 
 ## Conventions
 

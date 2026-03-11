@@ -1,4 +1,9 @@
-import { BadRequestException, Module, ValidationError, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  Module,
+  ValidationError,
+  ValidationPipe,
+} from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 
 @Module({
@@ -8,10 +13,13 @@ import { APP_PIPE } from '@nestjs/core';
       provide: APP_PIPE,
       useFactory: () => {
         return new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          forbidNonWhitelisted: true,
           exceptionFactory: (validationErrors: ValidationError[]) => {
             throw new BadRequestException(validationErrors.toString());
           },
-        })
+        });
       },
     },
   ],

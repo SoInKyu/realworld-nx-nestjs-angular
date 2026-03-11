@@ -1,0 +1,29 @@
+schema: spec-driven
+
+context: |
+  Tech stack: NX v11.5.2 monorepo, NestJS v7 (backend), Angular v11 (frontend), TypeORM v0.2.31, MySQL, Jest v26
+  NPM scope: @realworld
+  Architecture: Fat Controller / Thin Service pattern
+  - Services extend BaseService<T> (generic CRUD wrapper)
+  - Most services have no custom methods (constructor only)
+  - UserService is the exception (login, register, JWT, password hashing)
+  - Controllers contain business logic (auth checks, query composition, response mapping)
+  Domain structure: user (User, Follow) and article (Article, Comment, Tag, Favorite)
+  Auth: JWT via @nestjs/passport, @SkipAuth() decorator for public routes
+  Database: MySQL with TypeORM migrations, soft delete pattern, UUID primary keys
+  CI: GitHub Actions (PR trigger, lint → test → build via NX affected)
+  Conventions: TypeScript (not strict), 2-space indent, single quotes
+
+rules:
+  proposal:
+    - Keep proposals focused on a single feature or domain
+    - Include affected NX libraries in scope
+    - Consider both backend (NestJS) and frontend (Angular) impacts
+  tasks:
+    - Break tasks by NX library boundary (e.g., user-api-shared, article-api-handlers)
+    - Include test requirements for each task
+    - Specify which test pattern to use (service test or controller test)
+  spec:
+    - Document entity relationships and DTOs
+    - Include API endpoint definitions
+    - Reference existing patterns in the codebase

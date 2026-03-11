@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { IConfigurationService } from '@realworld/shared/configuration';
 import { IUserService } from '@realworld/user/shared';
 import { IArticleService, ITagService } from '@realworld/article/shared';
 import { HomeComponent } from './home.component';
 
+const mockConfigService = { configs$: { subscribe: jest.fn() } };
 const mockUserService = { isAuth: false };
 const mockArticleService = { getAll: jest.fn(), getFeed: jest.fn(), favoriteArticle: jest.fn(), unfavoriteArticle: jest.fn() };
 const mockTagService = { getAll: jest.fn() };
@@ -19,6 +21,7 @@ describe('HomeComponent', () => {
       declarations: [HomeComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
+        { provide: IConfigurationService, useValue: mockConfigService },
         { provide: IUserService, useValue: mockUserService },
         { provide: IArticleService, useValue: mockArticleService },
         { provide: ITagService, useValue: mockTagService },

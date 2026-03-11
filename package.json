@@ -32,7 +32,8 @@
     "serve:api": "nx serve api",
     "serve:api-conduit": "concurrently -p=\"{name}\" -n=\"Conduit,API\" -c=\"blue,yellow\" \"npm run serve:conduit\" \"npm run serve:api\"",
     "build-prod:conduit": "nx build conduit --prod",
-    "build-prod:api": "nx build api --prod"
+    "build-prod:api": "nx build api --prod",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -75,6 +76,9 @@
     "typeorm": "^0.2.31",
     "zone.js": "^0.10.2"
   },
+  "lint-staged": {
+    "*.{ts,html,scss,css,json,md}": "prettier --write"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.0",
     "@angular-eslint/eslint-plugin": "~1.0.0",
@@ -104,8 +108,10 @@
     "eslint": "7.10.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "husky": "^9.1.7",
     "jest": "26.2.2",
     "jest-preset-angular": "8.3.2",
+    "lint-staged": "^16.3.3",
     "prettier": "2.2.1",
     "supertest": "^6.1.6",
     "ts-jest": "26.4.0",

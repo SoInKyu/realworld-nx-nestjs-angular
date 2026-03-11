@@ -84,12 +84,23 @@ JWT via `@nestjs/passport`. Routes marked with `@SkipAuth()` decorator are publi
 ## Testing Patterns
 
 ### Service Tests (mock Repository)
+
 ```typescript
-const mockRepository = { findOne: jest.fn(), insert: jest.fn(), update: jest.fn(), find: jest.fn() };
-const service = new UserService(mockRepository as any, mockJwtService as any, mockFollowService as any);
+const mockRepository = {
+  findOne: jest.fn(),
+  insert: jest.fn(),
+  update: jest.fn(),
+  find: jest.fn(),
+};
+const service = new UserService(
+  mockRepository as any,
+  mockJwtService as any,
+  mockFollowService as any
+);
 ```
 
 ### Controller Tests (mock Services, no TestingModule needed)
+
 ```typescript
 const mockArticleService = { findAll: jest.fn(), findOne: jest.fn(), insert: jest.fn(), ... };
 const controller = new ArticleApiHandlersController(mockArticleService as any, ...);
@@ -97,13 +108,21 @@ const mockReq = { user: { sub: 'user-id' }, headers: { authorization: 'Bearer to
 ```
 
 ### Node 23 Compatibility
+
 `@nestjs/typeorm@7` uses the removed `util.isNullOrUndefined`. Add this mock at the **top** of every test file (before imports):
+
 ```typescript
 jest.mock('@nestjs/typeorm', () => ({
   InjectRepository: () => () => {},
   TypeOrmModule: { forFeature: () => ({ module: class {} }) },
 }));
 ```
+
+## Work Rules
+
+- 독립적인 작업은 반드시 병렬로 수행한다 (예: 서로 다른 라이브러리의 테스트 작성, 독립된 파일 읽기/검색, 관련 없는 서브태스크 동시 실행)
+- Agent 도구 사용 시 의존성이 없는 작업은 하나의 메시지에서 여러 Agent를 동시에 dispatch한다
+- Bash 도구도 독립적인 명령어는 병렬로 호출한다 (예: 여러 프로젝트의 테스트를 동시에 실행)
 
 ## Conventions
 

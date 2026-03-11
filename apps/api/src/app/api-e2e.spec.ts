@@ -19,15 +19,49 @@ import * as request from 'supertest';
 import { UserApiHandlersController } from '@realworld/user/api/handlers';
 import { UserService, FollowService } from '@realworld/user/api/shared';
 import { ArticleApiHandlersController } from '@realworld/article/api/handlers';
-import { ArticleService, CommentService, FavoriteService, TagService } from '@realworld/article/api/shared';
+import {
+  ArticleService,
+  CommentService,
+  FavoriteService,
+  TagService,
+} from '@realworld/article/api/shared';
 
 describe('API E2E Scenarios', () => {
   let app: INestApplication;
 
-  const user = { id: 'u1', username: 'testuser', email: 'test@test.com', bio: 'bio', image: '', token: 'jwt-token', createdAt: new Date() };
-  const profile = { username: 'testuser', bio: 'bio', image: '', following: false, createdAt: new Date() };
-  const article = { id: 'a1', slug: 'test-article', title: 'Test', description: 'desc', body: 'body', authorId: 'u1', tagList: ['test'], createdAt: new Date() };
-  const comment = { id: 'c1', body: 'Great article!', authorId: 'u1', articleSlug: 'test-article', createdAt: new Date() };
+  const user = {
+    id: 'u1',
+    username: 'testuser',
+    email: 'test@test.com',
+    bio: 'bio',
+    image: '',
+    token: 'jwt-token',
+    createdAt: new Date(),
+  };
+  const profile = {
+    username: 'testuser',
+    bio: 'bio',
+    image: '',
+    following: false,
+    createdAt: new Date(),
+  };
+  const article = {
+    id: 'a1',
+    slug: 'test-article',
+    title: 'Test',
+    description: 'desc',
+    body: 'body',
+    authorId: 'u1',
+    tagList: ['test'],
+    createdAt: new Date(),
+  };
+  const comment = {
+    id: 'c1',
+    body: 'Great article!',
+    authorId: 'u1',
+    articleSlug: 'test-article',
+    createdAt: new Date(),
+  };
 
   const mockUserService = {
     login: jest.fn().mockResolvedValue(user),
@@ -69,12 +103,24 @@ describe('API E2E Scenarios', () => {
     count: jest.fn().mockResolvedValue(1),
   };
 
+  const mockQueryBuilder = {
+    select: jest.fn().mockReturnThis(),
+    addSelect: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    andWhere: jest.fn().mockReturnThis(),
+    groupBy: jest.fn().mockReturnThis(),
+    getRawMany: jest.fn().mockResolvedValue([]),
+  };
+
   const mockFavoriteService = {
     findOne: jest.fn().mockResolvedValue(null),
     findAll: jest.fn().mockResolvedValue([]),
     insert: jest.fn(),
     softDelete: jest.fn(),
     count: jest.fn().mockResolvedValue(0),
+    repository: {
+      createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
+    },
   };
 
   const mockTagService = {
@@ -111,7 +157,11 @@ describe('API E2E Scenarios', () => {
     mockUserService.register.mockResolvedValue(user);
     const res = await request(app.getHttpServer())
       .post('/api/users')
-      .send({ username: 'testuser', email: 'test@test.com', password: 'pass123' })
+      .send({
+        username: 'testuser',
+        email: 'test@test.com',
+        password: 'pass123',
+      })
       .expect(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.email).toBe('test@test.com');
@@ -141,9 +191,7 @@ describe('API E2E Scenarios', () => {
   it('GET /api/tags - list tags', async () => {
     mockTagService.findAll.mockResolvedValue([{ name: 'test', count: 1 }]);
     mockTagService.count.mockResolvedValue(1);
-    const res = await request(app.getHttpServer())
-      .get('/api/tags')
-      .expect(200);
+    const res = await request(app.getHttpServer()).get('/api/tags').expect(200);
     expect(res.body.success).toBe(true);
     expect(res.body.listData).toContain('test');
   });
